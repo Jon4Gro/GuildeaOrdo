@@ -1,0 +1,22 @@
+## Interface: 30300
+## Title: |cFFFFCC00GuildeaOrdo|r
+## Notes: Wrath 3.3.5a GuildeaOrdo - Guild Management Addon - Roster, Event Log, Alts, Macros, Mass Promote, Kick, Invite and Flood
+## Refined by Sam
+## Version: 1.5
+## SavedVariables: GuildeaOrdoDB
+## SavedVariablesPerCharacter: GuildeaOrdoCharDB
+
+Core.lua
+Core_Commands.lua
+Core_Invite.lua
+Core_Log.lua
+Core_Blacklist.lua
+UI_Main.lua
+UI_Log.lua
+UI_Roster.lua
+UI_Alts.lua
+UI_Macros.lua
+UI_Ranks.lua
+UI_Settings.lua
+UI_Blacklist.lua
+Roster.lua

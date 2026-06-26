@@ -1,10 +1,10 @@
--- GildeaOrdo Alts UI Module
-local addon = GildeaOrdo
+-- GuildeaOrdo Alts UI Module
+local addon = GuildeaOrdo
 local UI    = addon.UI
 
 function UI.BuildAlts(f)
-    f.altInputAlt  = CreateFrame("EditBox", "GildeaOrdoAltInput",  f, "InputBoxTemplate")
-    f.altInputMain = CreateFrame("EditBox", "GildeaOrdoMainInput", f, "InputBoxTemplate")
+    f.altInputAlt  = CreateFrame("EditBox", "GuildeaOrdoAltInput",  f, "InputBoxTemplate")
+    f.altInputMain = CreateFrame("EditBox", "GuildeaOrdoMainInput", f, "InputBoxTemplate")
     f.altInputAlt:SetSize(120, 20); f.altInputMain:SetSize(120, 20)
     f.altInputAlt:SetPoint("BOTTOMLEFT",  24, 22); f.altInputMain:SetPoint("LEFT", f.altInputAlt, "RIGHT", 12, 0)
     f.altInputAlt:SetAutoFocus(false); f.altInputMain:SetAutoFocus(false)
@@ -23,7 +23,7 @@ function UI.BuildAlts(f)
         local a, m = f.altInputAlt:GetText(), f.altInputMain:GetText()
         if a and a ~= "" and m and m ~= "" then
             local ok, msg = addon:SetAlt(a, m)
-            print("|cFFFFCC00GildeaOrdo|r: " .. tostring(msg))
+            print("|cFFFFCC00GuildeaOrdo|r: " .. tostring(msg))
             f.altInputAlt:SetText(""); f.altInputMain:SetText(""); UI:Refresh()
         end
     end)
@@ -36,7 +36,7 @@ function UI.BuildAlts(f)
         local a = f.altInputAlt:GetText()
         if a and a ~= "" then
             local ok, msg = addon:SetAlt(a, nil)
-            print("|cFFFFCC00GildeaOrdo|r: " .. tostring(msg))
+            print("|cFFFFCC00GuildeaOrdo|r: " .. tostring(msg))
             f.altInputAlt:SetText(""); UI:Refresh()
         end
     end)

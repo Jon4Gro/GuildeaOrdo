@@ -1,10 +1,10 @@
--- GildeaOrdo Log UI Module
-local addon = GildeaOrdo
+-- GuildeaOrdo Log UI Module
+local addon = GuildeaOrdo
 local UI    = addon.UI
 
 function UI.BuildLog(f)
     -- Search Input
-    f.logSearch = CreateFrame("EditBox", "GildeaOrdoLogSearch", f, "InputBoxTemplate")
+    f.logSearch = CreateFrame("EditBox", "GuildeaOrdoLogSearch", f, "InputBoxTemplate")
     f.logSearch:SetSize(220, 20)
     f.logSearch:SetPoint("TOPLEFT", f.tabLog, "BOTTOMLEFT", 8, -18)
     f.logSearch:SetAutoFocus(false)
@@ -31,7 +31,7 @@ function UI.BuildLog(f)
     f.filterChecks = {}
     local cbY = -30
     for _, key in ipairs(UI.TYPE_ORDER) do
-        local cb = CreateFrame("CheckButton", "GildeaOrdoFC_" .. key, f.filterPanel, "OptionsBaseCheckButtonTemplate")
+        local cb = CreateFrame("CheckButton", "GuildeaOrdoFC_" .. key, f.filterPanel, "OptionsBaseCheckButtonTemplate")
         cb:SetSize(20, 20); cb:SetPoint("TOPLEFT", 10, cbY); cb:SetChecked(UI.typeFilters[key])
         local labelKey = key
         cb:SetScript("OnClick", function(self) UI.typeFilters[labelKey] = self:GetChecked() and true or false; UI:Refresh() end)
@@ -58,7 +58,7 @@ function UI.BuildLog(f)
     end)
 
     -- Numbered + Clear Log Bottom Controls
-    f.numberedCB = CreateFrame("CheckButton", "GildeaOrdoNumberedCB", f, "OptionsBaseCheckButtonTemplate")
+    f.numberedCB = CreateFrame("CheckButton", "GuildeaOrdoNumberedCB", f, "OptionsBaseCheckButtonTemplate")
     f.numberedCB:SetSize(20, 20); f.numberedCB:SetPoint("BOTTOMLEFT", 24, 22)
     f.numberedCB:SetChecked(UI.showLineNumbers)
     f.numberedCB:SetScript("OnClick", function(self) UI.showLineNumbers = self:GetChecked() and true or false; UI:Refresh() end)

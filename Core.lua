@@ -1,8 +1,8 @@
--- GildeaOrdo Core
+-- GuildeaOrdo Core
 -- Wrath 3.3.5a native guild roster tracking, event log, alts management.
 
-GildeaOrdo = GildeaOrdo or {}
-local addon = GildeaOrdo
+GuildeaOrdo = GuildeaOrdo or {}
+local addon = GuildeaOrdo
 addon.version = "1.0" -- 1.6: Purge Blacklist, dynamic search, SavedVariables migration (Auto-Invite), codebase refactoring
 
 -- Global states
@@ -12,29 +12,29 @@ local currentGuildKey      -- realm::guildname for the currently active guild
 -- SavedVariables bootstrap
 -- =========================================================
 function addon:ensureDB()
-    if type(GildeaOrdoDB)     ~= "table" then GildeaOrdoDB     = {} end
-    if type(GildeaOrdoCharDB) ~= "table" then GildeaOrdoCharDB = {} end
-    if type(GildeaOrdoCharDB.massPromote) ~= "table" then GildeaOrdoCharDB.massPromote = {} end
-    if GildeaOrdoCharDB.openWithGuild == nil then GildeaOrdoCharDB.openWithGuild = true end
-    if GildeaOrdoCharDB.closeWithGuild == nil then GildeaOrdoCharDB.closeWithGuild = true end
-    if type(GildeaOrdoDB.guilds) ~= "table" then GildeaOrdoDB.guilds = {} end
-    if type(GildeaOrdoDB.macros) ~= "table" then GildeaOrdoDB.macros = {} end
-    if not GildeaOrdoDB.version then GildeaOrdoDB.version = 3 end
-    if not GildeaOrdoDB.batchSize then GildeaOrdoDB.batchSize = 2 end 
-if GildeaOrdoDB.showMinimapButton == nil then GildeaOrdoDB.showMinimapButton = true end
-    if not GildeaOrdoDB.minimapRotation then GildeaOrdoDB.minimapRotation = 0 end
-    if not GildeaOrdoDB.minimapDistance then GildeaOrdoDB.minimapDistance = 80 end
-    if GildeaOrdoDB.bracketLeft == nil then GildeaOrdoDB.bracketLeft = "[" end
-    if GildeaOrdoDB.bracketRight == nil then GildeaOrdoDB.bracketRight = "]" end
+    if type(GuildeaOrdoDB)     ~= "table" then GuildeaOrdoDB     = {} end
+    if type(GuildeaOrdoCharDB) ~= "table" then GuildeaOrdoCharDB = {} end
+    if type(GuildeaOrdoCharDB.massPromote) ~= "table" then GuildeaOrdoCharDB.massPromote = {} end
+    if GuildeaOrdoCharDB.openWithGuild == nil then GuildeaOrdoCharDB.openWithGuild = true end
+    if GuildeaOrdoCharDB.closeWithGuild == nil then GuildeaOrdoCharDB.closeWithGuild = true end
+    if type(GuildeaOrdoDB.guilds) ~= "table" then GuildeaOrdoDB.guilds = {} end
+    if type(GuildeaOrdoDB.macros) ~= "table" then GuildeaOrdoDB.macros = {} end
+    if not GuildeaOrdoDB.version then GuildeaOrdoDB.version = 3 end
+    if not GuildeaOrdoDB.batchSize then GuildeaOrdoDB.batchSize = 2 end
+if GuildeaOrdoDB.showMinimapButton == nil then GuildeaOrdoDB.showMinimapButton = true end
+    if not GuildeaOrdoDB.minimapRotation then GuildeaOrdoDB.minimapRotation = 0 end
+    if not GuildeaOrdoDB.minimapDistance then GuildeaOrdoDB.minimapDistance = 80 end
+    if GuildeaOrdoDB.bracketLeft == nil then GuildeaOrdoDB.bracketLeft = "[" end
+    if GuildeaOrdoDB.bracketRight == nil then GuildeaOrdoDB.bracketRight = "]" end
 
-    -- Migration: Move autoInvite from account-wide GildeaOrdoDB to character-specific GildeaOrdoCharDB
-    if type(GildeaOrdoDB.autoInvite) == "table" then
-        GildeaOrdoCharDB.autoInvite = GildeaOrdoDB.autoInvite
-        GildeaOrdoDB.autoInvite = nil
+    -- Migration: Move autoInvite from account-wide GuildeaOrdoDB to character-specific GuildeaOrdoCharDB
+    if type(GuildeaOrdoDB.autoInvite) == "table" then
+        GuildeaOrdoCharDB.autoInvite = GuildeaOrdoDB.autoInvite
+        GuildeaOrdoDB.autoInvite = nil
     end
 
-    if type(GildeaOrdoCharDB.autoInvite) ~= "table" then
-        GildeaOrdoCharDB.autoInvite = {
+    if type(GuildeaOrdoCharDB.autoInvite) ~= "table" then
+        GuildeaOrdoCharDB.autoInvite = {
             enabled = false,
             phrase = "",
             groupinv = "",
@@ -44,19 +44,19 @@ if GildeaOrdoDB.showMinimapButton == nil then GildeaOrdoDB.showMinimapButton = t
             replyLow = "Your level is too low for auto-invite. Please level up first!"
         }
     else
-        if GildeaOrdoCharDB.autoInvite.groupinv == nil then GildeaOrdoCharDB.autoInvite.groupinv = "" end
-        if GildeaOrdoCharDB.autoInvite.minLvl == nil then GildeaOrdoCharDB.autoInvite.minLvl = 1 end
-        if GildeaOrdoCharDB.autoInvite.replyLow == nil then GildeaOrdoCharDB.autoInvite.replyLow = "" end
-        if GildeaOrdoCharDB.autoInvite.groupMinutes == nil then GildeaOrdoCharDB.autoInvite.groupMinutes = 15 end
+        if GuildeaOrdoCharDB.autoInvite.groupinv == nil then GuildeaOrdoCharDB.autoInvite.groupinv = "" end
+        if GuildeaOrdoCharDB.autoInvite.minLvl == nil then GuildeaOrdoCharDB.autoInvite.minLvl = 1 end
+        if GuildeaOrdoCharDB.autoInvite.replyLow == nil then GuildeaOrdoCharDB.autoInvite.replyLow = "" end
+        if GuildeaOrdoCharDB.autoInvite.groupMinutes == nil then GuildeaOrdoCharDB.autoInvite.groupMinutes = 15 end
     end
-    if not GildeaOrdoDB.spamTotalMinutes then GildeaOrdoDB.spamTotalMinutes = 0 end
-    if type(GildeaOrdoDB.blacklist) ~= "table" then GildeaOrdoDB.blacklist = {} end
-    if GildeaOrdoDB.blacklistReply == nil then GildeaOrdoDB.blacklistReply = "You are currently blacklisted from auto-invites." end
-    if GildeaOrdoDB.autoBanOnLeave == nil then GildeaOrdoDB.autoBanOnLeave = false end
+    if not GuildeaOrdoDB.spamTotalMinutes then GuildeaOrdoDB.spamTotalMinutes = 0 end
+    if type(GuildeaOrdoDB.blacklist) ~= "table" then GuildeaOrdoDB.blacklist = {} end
+    if GuildeaOrdoDB.blacklistReply == nil then GuildeaOrdoDB.blacklistReply = "You are currently blacklisted from auto-invites." end
+    if GuildeaOrdoDB.autoBanOnLeave == nil then GuildeaOrdoDB.autoBanOnLeave = false end
     -- migrate old boolean blacklist entries to string notes ("" = no note)
-    for k, v in pairs(GildeaOrdoDB.blacklist) do
+    for k, v in pairs(GuildeaOrdoDB.blacklist) do
         if type(v) == "boolean" then
-            GildeaOrdoDB.blacklist[k] = ""
+            GuildeaOrdoDB.blacklist[k] = ""
         end
     end
 end
@@ -65,30 +65,30 @@ end
 -- Macros API (account-wide saved messages bound to a channel)
 -- =========================================================
 function addon:GetMacros()
-    if type(GildeaOrdoDB) ~= "table" or type(GildeaOrdoDB.macros) ~= "table" then
+    if type(GuildeaOrdoDB) ~= "table" or type(GuildeaOrdoDB.macros) ~= "table" then
         return {}
     end
-    return GildeaOrdoDB.macros
+    return GuildeaOrdoDB.macros
 end
 
 function addon:AddMacro(channel, text)
     if not channel or channel == "" then return false, "Pick a channel." end
     if not text or text == "" then return false, "Message cannot be empty." end
-    GildeaOrdoDB.macros = GildeaOrdoDB.macros or {}
-    table.insert(GildeaOrdoDB.macros, { channel = channel, text = text })
+    GuildeaOrdoDB.macros = GuildeaOrdoDB.macros or {}
+    table.insert(GuildeaOrdoDB.macros, { channel = channel, text = text })
     return true
 end
 
 function addon:RemoveMacro(index)
-    if not GildeaOrdoDB.macros then return end
+    if not GuildeaOrdoDB.macros then return end
     if type(index) ~= "number" then return end
-    if index < 1 or index > #GildeaOrdoDB.macros then return end
-    table.remove(GildeaOrdoDB.macros, index)
+    if index < 1 or index > #GuildeaOrdoDB.macros then return end
+    table.remove(GuildeaOrdoDB.macros, index)
 end
 
 function addon:SendMacro(index)
-    if not GildeaOrdoDB.macros then return false, "No macros." end
-    local m = GildeaOrdoDB.macros[index]
+    if not GuildeaOrdoDB.macros then return false, "No macros." end
+    local m = GuildeaOrdoDB.macros[index]
     if not m then return false, "Macro not found." end
     return addon:Broadcast(m.channel, m.text)
 end
@@ -123,10 +123,10 @@ local function guildKey(realmName, guildName)
 end
 
 function addon:ensureGuildEntry(key)
-    local g = GildeaOrdoDB.guilds[key]
+    local g = GuildeaOrdoDB.guilds[key]
     if not g then
         g = { members = {}, log = {}, alts = {}, whitelist = {}}
-        GildeaOrdoDB.guilds[key] = g
+        GuildeaOrdoDB.guilds[key] = g
     end
     if not g.members       then g.members       = {} end
     if not g.log           then g.log           = {} end
@@ -138,7 +138,7 @@ end
 
 function addon:GetCurrentGuild()
     if not addon.currentGuildKey then return nil end
-    return GildeaOrdoDB and GildeaOrdoDB.guilds and GildeaOrdoDB.guilds[addon.currentGuildKey]
+    return GuildeaOrdoDB and GuildeaOrdoDB.guilds and GuildeaOrdoDB.guilds[addon.currentGuildKey]
 end
 
 function addon:GetCurrentGuildKey()
@@ -195,10 +195,10 @@ local minimapButton
 
 local function updateMinimapButtonPosition()
     if not minimapButton or not Minimap then return end
-    local rot = (GildeaOrdoDB and GildeaOrdoDB.minimapRotation or 0) % 360
+    local rot = (GuildeaOrdoDB and GuildeaOrdoDB.minimapRotation or 0) % 360
     if rot < 0 then rot = 0 end
     if rot > 360 then rot = 360 end
-    local dist = GildeaOrdoDB and GildeaOrdoDB.minimapDistance or 80
+    local dist = GuildeaOrdoDB and GuildeaOrdoDB.minimapDistance or 80
     if dist < 20 then dist = 20 end
     if dist > 240 then dist = 240 end
     local rad = math.rad(rot)
@@ -210,7 +210,7 @@ end
 
 local function createMinimapButton()
     if minimapButton or not Minimap then return end
-    local b = CreateFrame("Button", "GildeaOrdoMinimapButton", Minimap)
+    local b = CreateFrame("Button", "GuildeaOrdoMinimapButton", Minimap)
     b:SetSize(32, 32)
     b:SetFrameStrata("MEDIUM")
     b:SetFrameLevel((Minimap:GetFrameLevel() or 0) + 8)
@@ -218,7 +218,7 @@ local function createMinimapButton()
     local icon = b:CreateTexture(nil, "ARTWORK")
     icon:SetSize(18, 18)
     icon:SetPoint("CENTER")
-    icon:SetTexture("Interface\\AddOns\\GildeaOrdo\\GildeaOrdo")
+    icon:SetTexture("Interface\\AddOns\\GuildeaOrdo\\GuildeaOrdo")
     icon:SetTexCoord(0.06, 0.94, 0.06, 0.94)
     b.icon = icon
 
@@ -244,7 +244,7 @@ local function createMinimapButton()
 
     b:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-        GameTooltip:AddLine("|cFFFFCC00GildeaOrdo|r")
+        GameTooltip:AddLine("|cFFFFCC00GuildeaOrdo|r")
         GameTooltip:AddLine("Left-click to open/close", 0.8, 0.8, 0.8)
         GameTooltip:Show()
     end)
@@ -255,7 +255,7 @@ local function createMinimapButton()
 end
 
 function addon:UpdateMinimapButton()
-    local enabled = GildeaOrdoDB and GildeaOrdoDB.showMinimapButton
+    local enabled = GuildeaOrdoDB and GuildeaOrdoDB.showMinimapButton
     if enabled then
         if not minimapButton then createMinimapButton() end
         if minimapButton then
@@ -294,15 +294,15 @@ end
 -- Guild Frame Hook (Moved to be defined BEFORE it is called)
 -- =========================================================
 local function hookGuildFrame()
-    if GuildFrame and not GuildFrame.__GildeaOrdoHooked then
-        GuildFrame.__GildeaOrdoHooked = true
+    if GuildFrame and not GuildFrame.__GuildeaOrdoHooked then
+        GuildFrame.__GuildeaOrdoHooked = true
         GuildFrame:HookScript("OnShow", function()
-            if GildeaOrdoCharDB and GildeaOrdoCharDB.openWithGuild then
+            if GuildeaOrdoCharDB and GuildeaOrdoCharDB.openWithGuild then
                 if addon.UI and addon.UI.Show then addon.UI:Show() end
             end
         end)
         GuildFrame:HookScript("OnHide", function()
-            if GildeaOrdoCharDB and GildeaOrdoCharDB.closeWithGuild then
+            if GuildeaOrdoCharDB and GuildeaOrdoCharDB.closeWithGuild then
                 if addon.UI and addon.UI.Hide then addon.UI:Hide() end
             end
         end)
@@ -326,7 +326,7 @@ if not addon.spamActive then return end
     addon.spamTotalElapsed = addon.spamTotalElapsed + elapsed
         if addon.spamTotalElapsed >= (addon.spamTotalLimit * 60) then
         addon.spamActive = false
-            print("|cFFFFCC00GildeaOrdo|r: Macro Spam Ended (Duration expired).")
+            print("|cFFFFCC00GuildeaOrdo|r: Macro Spam Ended (Duration expired).")
             if addon.UI and addon.UI.RefreshIfShown then addon.UI:RefreshIfShown() end
                 return
                 end
@@ -357,10 +357,10 @@ backend:RegisterEvent("CHAT_MSG_OFFICER")
 
 backend:SetScript("OnEvent", function(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
     if event == "ADDON_LOADED" then
-        if arg1 == "GildeaOrdo" then
+        if arg1 == "GuildeaOrdo" then
             addon:ensureDB()
-            if GildeaOrdoDB and GildeaOrdoDB.spamTotalMinutes then
-                addon.spamTotalLimit = GildeaOrdoDB.spamTotalMinutes
+            if GuildeaOrdoDB and GuildeaOrdoDB.spamTotalMinutes then
+                addon.spamTotalLimit = GuildeaOrdoDB.spamTotalMinutes
             end
             if addon.UpdateMinimapButton then addon:UpdateMinimapButton() end
         elseif arg1 == "Blizzard_GuildUI" then
@@ -382,9 +382,9 @@ backend:SetScript("OnEvent", function(self, event, arg1, arg2, arg3, arg4, arg5,
         local myName = (UnitName("player") or ""):lower()
         if cleanSender == myName then return end
 
-        if msg == "GildeaOrdo Blacklist share:" then
-            print(string.format("|cFFFFCC00GildeaOrdo|r: Received blacklist share from |cffffffff%s|r. Adding/updating entries.", sender or "?"))
-        elseif msg:match("^GildeaOrdo BL: ") then
+        if msg == "GuildeaOrdo Blacklist share:" then
+            print(string.format("|cFFFFCC00GuildeaOrdo|r: Received blacklist share from |cffffffff%s|r. Adding/updating entries.", sender or "?"))
+        elseif msg:match("^GuildeaOrdo BL: ") then
             local rest = msg:sub(14):match("^%s*(.-)%s*$")
             if rest and rest ~= "" then
                 local pos = 1
@@ -409,12 +409,15 @@ backend:SetScript("OnEvent", function(self, event, arg1, arg2, arg3, arg4, arg5,
                 end
             end
         end
-    elseif event == "CHAT_MSG_WHISPER" then
+        elseif event == "CHAT_MSG_WHISPER" then
         local msg, sender = arg1, arg2
 
+        -- ADD THIS LINE: Track the last person who whispered for the /go invl command
+        addon.lastWhisperedPlayer = sender
+
         -- 1. Auto Guild Invite
-        if GildeaOrdoDB and GildeaOrdoCharDB.autoInvite then
-            local conf = GildeaOrdoCharDB.autoInvite
+        if GuildeaOrdoDB and GuildeaOrdoCharDB.autoInvite then
+            local conf = GuildeaOrdoCharDB.autoInvite
             if conf.phrase and conf.phrase ~= "" and addon.containsTriggerWord(msg, conf.phrase) then
                 if addon:IsBlacklisted(sender) then
                     local breply = addon:GetBlacklistReply()
@@ -456,7 +459,7 @@ backend:SetScript("OnEvent", function(self, event, arg1, arg2, arg3, arg4, arg5,
 
         -- 2. Auto Group Invite
         if addon.groupInviteActive then
-            local groupPhrase = GildeaOrdoDB and GildeaOrdoCharDB.autoInvite and GildeaOrdoCharDB.autoInvite.groupinv or ""
+            local groupPhrase = GuildeaOrdoDB and GuildeaOrdoCharDB.autoInvite and GuildeaOrdoCharDB.autoInvite.groupinv or ""
             if addon.containsTriggerWord(msg, groupPhrase) then
                 if addon:IsBlacklisted(sender) then
                     local breply = addon:GetBlacklistReply()

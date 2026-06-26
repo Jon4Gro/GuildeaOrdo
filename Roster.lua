@@ -1,11 +1,11 @@
--- GildeaOrdo Roster overlay
+-- GuildeaOrdo Roster overlay
 -- A richer replacement for Wrath's GuildMemberDetailFrame.
 -- When a guild member is selected, we hide Blizzard's small detail frame
--- and pop our own panel that shows everything GildeaOrdo tracks plus the
+-- and pop our own panel that shows everything GuildeaOrdo tracks plus the
 -- standard Public Note / Officer's Note / Remove / Invite operations.
 
-GildeaOrdo = GildeaOrdo or {}
-local addon = GildeaOrdo
+GuildeaOrdo = GuildeaOrdo or {}
+local addon = GuildeaOrdo
 
 -- =========================================================
 -- Constants
@@ -189,7 +189,7 @@ end
 local function buildPanel()
     if panel then return panel end
 
-    local f = CreateFrame("Frame", "GildeaOrdoDetailPanel", UIParent)
+    local f = CreateFrame("Frame", "GuildeaOrdoDetailPanel", UIParent)
     f:SetSize(PANEL_W, PANEL_H)
     f:SetPoint("CENTER")  -- repositioned on show
     f:SetBackdrop(FRAME_BACKDROP)
@@ -349,7 +349,7 @@ local function buildPanel()
     f.btnUntag:SetScript("OnClick", function()
         if currentName then
             local ok, msg = addon:SetAlt(currentName, nil)
-            print("|cFFFFCC00GildeaOrdo |r: " .. tostring(msg))
+            print("|cFFFFCC00GuildeaOrdo |r: " .. tostring(msg))
             refreshPanel()
             if addon.UI and addon.UI.RefreshIfShown then addon.UI:RefreshIfShown() end
         end
@@ -362,7 +362,7 @@ local function buildPanel()
     f.btnPromote:SetPoint("BOTTOMLEFT", 18, 40)
     f.btnPromote:SetScript("OnClick", function()
         if not currentName then return end
-        StaticPopupDialogs["GildeaOrdo_CONFIRM_PROMOTE"] = {
+        StaticPopupDialogs["GuildeaOrdo_CONFIRM_PROMOTE"] = {
             text = "Promote |cffffff00"..currentName.."|r by one rank?",
             button1 = "Promote",
             button2 = "Cancel",
@@ -376,7 +376,7 @@ local function buildPanel()
             hideOnEscape = true,
             preferredIndex = 3,
         }
-        StaticPopup_Show("GildeaOrdo_CONFIRM_PROMOTE")
+        StaticPopup_Show("GuildeaOrdo_CONFIRM_PROMOTE")
     end)
 
     f.btnDemote = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
@@ -385,7 +385,7 @@ local function buildPanel()
     f.btnDemote:SetPoint("BOTTOMRIGHT", -18, 40)
     f.btnDemote:SetScript("OnClick", function()
         if not currentName then return end
-        StaticPopupDialogs["GildeaOrdo_CONFIRM_DEMOTE"] = {
+        StaticPopupDialogs["GuildeaOrdo_CONFIRM_DEMOTE"] = {
             text = "Demote |cffffff00"..currentName.."|r by one rank?",
             button1 = "Demote",
             button2 = "Cancel",
@@ -399,7 +399,7 @@ local function buildPanel()
             hideOnEscape = true,
             preferredIndex = 3,
         }
-        StaticPopup_Show("GildeaOrdo_CONFIRM_DEMOTE")
+        StaticPopup_Show("GuildeaOrdo_CONFIRM_DEMOTE")
     end)
 
     -- ===== Action buttons (Remove / Invite) =====
@@ -419,7 +419,7 @@ local function buildPanel()
     f.btnRemove:SetPoint("BOTTOMRIGHT", -18, 12)
     f.btnRemove:SetScript("OnClick", function()
         if not currentName then return end
-        StaticPopupDialogs["GildeaOrdo_CONFIRM_REMOVE"] = {
+        StaticPopupDialogs["GuildeaOrdo_CONFIRM_REMOVE"] = {
             text = "Remove |cffffff00"..currentName.."|r from the guild?",
             button1 = "Remove",
             button2 = "Cancel",
@@ -440,7 +440,7 @@ local function buildPanel()
             hideOnEscape = true,
             preferredIndex = 3,
         }
-        StaticPopup_Show("GildeaOrdo_CONFIRM_REMOVE")
+        StaticPopup_Show("GuildeaOrdo_CONFIRM_REMOVE")
     end)
 
     panel = f
@@ -467,7 +467,7 @@ function addon:ShowMemberDetail(name)
     currentName = name
     if not panel:IsShown() then
         panel:ClearAllPoints()
-        local mainFrame = _G["GildeaOrdoMainFrame"]
+        local mainFrame = _G["GuildeaOrdoMainFrame"]
         if mainFrame and mainFrame:IsShown() then
             panel:SetPoint("TOPLEFT", mainFrame, "TOPRIGHT", -10, 0)
         elseif GuildRosterFrame and GuildRosterFrame:IsShown() then
@@ -517,8 +517,8 @@ end
 
 local function attach()
     if not GuildMemberDetailFrame then return end
-    if GuildMemberDetailFrame.__GildeaOrdoTakeover then return end
-    GuildMemberDetailFrame.__GildeaOrdoTakeover = true
+    if GuildMemberDetailFrame.__GuildeaOrdoTakeover then return end
+    GuildMemberDetailFrame.__GuildeaOrdoTakeover = true
 
     buildPanel()
 
@@ -538,9 +538,9 @@ local function attach()
     -- in without a fresh OnShow (e.g. clicking a different roster row
     -- while our panel is already up).
     panel:HookScript("OnUpdate", function(self, elapsed)
-        self.__GildeaOrdoTimer = (self.__GildeaOrdoTimer or 0) + (elapsed or 0)
-        if self.__GildeaOrdoTimer < 0.1 then return end
-        self.__GildeaOrdoTimer = 0
+        self.__GuildeaOrdoTimer = (self.__GuildeaOrdoTimer or 0) + (elapsed or 0)
+        if self.__GuildeaOrdoTimer < 0.1 then return end
+        self.__GuildeaOrdoTimer = 0
 
         local name = currentSelectionName()
         if name and name ~= currentName then
@@ -565,7 +565,7 @@ retry:RegisterEvent("ADDON_LOADED")
 retry:SetScript("OnEvent", function(self)
     if GuildMemberDetailFrame then
         attach()
-        if GuildMemberDetailFrame.__GildeaOrdoTakeover then
+        if GuildMemberDetailFrame.__GuildeaOrdoTakeover then
             self:UnregisterAllEvents()
         end
     end

@@ -11,7 +11,7 @@ Features include deep event logging, alt-character mapping, channel-bound macros
 ## **What's New in Guildera Ordo v1.0**
 
 * **Modular UI & Codebase Refactoring**: The UI monolithic file has been split into targeted files (UI\_Main.lua, UI\_Log.lua, UI\_Roster.lua, UI\_Alts.lua, UI\_Macros.lua, UI\_Ranks.lua, UI\_Settings.lua, UI\_Blacklist.lua) for improved maintenance and readability.  
-* **SavedVariables Migration**: The Auto-Invite settings (enabled, phrase, groupinv, minLvl, etc.) have been safely migrated from the account-wide GildeaOrdoDB to the character-specific GildeaOrdoCharDB.  
+* **SavedVariables Migration**: The Auto-Invite settings (enabled, phrase, groupinv, minLvl, etc.) have been safely migrated from the account-wide GuildeaOrdoDB to the character-specific GuildeaOrdoCharDB.  
 * **Blacklist Enhancements**: Added a "Purge List" button with double-confirmation to wipe all entries, and introduced a dynamic search filter for the Blacklist window.  
 * **Auto Group Invite Polish**: Removed the "Permanent" checkbox; you can now natively set the group invite to permanent by entering 0 in the minutes field.
 
@@ -62,7 +62,7 @@ Features include deep event logging, alt-character mapping, channel-bound macros
 
 ### **🥾 Mass Kick List**
 
-* Filter the roster (name/note/offline-days), preview the list, then execute in safe configurable batches (GildeaOrdoDB.batchSize).  
+* Filter the roster (name/note/offline-days), preview the list, then execute in safe configurable batches (GuildeaOrdoDB.batchSize).  
 * Includes double confirmation and whitelist bypass.  
 * All kicks go through GuildUninvite with post-action RequestRosterAfterAction delay.
 
@@ -101,7 +101,7 @@ Features include deep event logging, alt-character mapping, channel-bound macros
 
 ### **🔗 Alts Mapping**
 
-* SetAlt / GetMainOf / GetAltsOf are stored per-guild in GildeaOrdoDB.guilds\[key\].alts.  
+* SetAlt / GetMainOf / GetAltsOf are stored per-guild in GuildeaOrdoDB.guilds\[key\].alts.  
 * Displayed in both Roster rows (\<M\> / (alt)) and the dedicated Alts tab \+ Member Detail panel (Roster.lua).
 
 ### **💬 Account-Wide Macros \+ Spam**
@@ -129,7 +129,7 @@ All built with plain Wrath frame API. Major buttons/headers use classic |cFFFFCC
    * **Auto Group Invite** (phrase, minutes 0=inf).  
    * **Blacklist...** button (bottom-right) — opens the account-wide blacklist manager docked to the right of the main window.
 
-Access with /go or /GuilderaOrdo. The main frame (GildeaOrdoMainFrame) is movable, clamped, and high-strata.
+Access with /go or /GuilderaOrdo. The main frame (GuildeaOrdoMainFrame) is movable, clamped, and high-strata.
 
 ## 
 
@@ -150,9 +150,9 @@ Access with /go or /GuilderaOrdo. The main frame (GildeaOrdoMainFrame) is movabl
 
 * **Interface TOC**: 30300 (WotLK 3.3.5a native)  
 * **Current Version**: 1.0  
-* **SavedVariables**: GildeaOrdoDB (account) – guilds, macros, batchSize, spamTotalMinutes, minimap settings, **blacklist**, **blacklistReply**
+* **SavedVariables**: GuildeaOrdoDB (account) – guilds, macros, batchSize, spamTotalMinutes, minimap settings, **blacklist**, **blacklistReply**
 
-* **SavedVariablesPerCharacter**: GildeaOrdoCharDB – open/close with guild, massPromote history, and autoInvite configurations.  
+* **SavedVariablesPerCharacter**: GuildeaOrdoCharDB – open/close with guild, massPromote history, and autoInvite configurations.  
 * **Files**: Core.lua (and modules), UI\_Main.lua (and modules), Roster.lua
 
 * **Key Patterns Used**: scheduleDiff, ProcessBatch, containsTriggerWord, dynamic FauxScroll handling, classic frame positioning

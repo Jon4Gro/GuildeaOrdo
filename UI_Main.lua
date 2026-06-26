@@ -1,8 +1,8 @@
--- GildeaOrdo UI Main
-GildeaOrdo = GildeaOrdo or {}
-GildeaOrdo.UI = {}
-local UI    = GildeaOrdo.UI
-local addon = GildeaOrdo
+-- GuildeaOrdo UI Main
+GuildeaOrdo = GuildeaOrdo or {}
+GuildeaOrdo.UI = {}
+local UI    = GuildeaOrdo.UI
+local addon = GuildeaOrdo
 
 -- =========================================================
 -- Constants & UI State
@@ -106,8 +106,8 @@ end
 function UI.classColor(classFile, name) return (UI.CLASS_COLOR[classFile or ""] or "|cffeeeeee") .. (name or "?") .. "|r" end
 
 function UI.ProcessBatch(actionName, list, actionFunc)
-    if not list or #list == 0 then print("|cff00ff00GildeaOrdo:|r No members in selection."); return end
-    local bSize = math.max(1, tonumber((GildeaOrdoDB and GildeaOrdoDB.batchSize) or 2))
+    if not list or #list == 0 then print("|cff00ff00GuildeaOrdo:|r No members in selection."); return end
+    local bSize = math.max(1, tonumber((GuildeaOrdoDB and GuildeaOrdoDB.batchSize) or 2))
     local total, currentIdx, batchNum = #list, 1, 1
     local processor = CreateFrame("Frame")
     local timer = 0
@@ -119,12 +119,12 @@ function UI.ProcessBatch(actionName, list, actionFunc)
             for i = currentIdx, endIdx do
                 if list[i] and list[i].name then actionFunc(list[i].name) end
             end
-            print("|cff00ff00GildeaOrdo:|r " .. actionName .. " Batch " .. batchNum .. " / " .. math.ceil(total / bSize) .. " Done")
+            print("|cff00ff00GuildeaOrdo:|r " .. actionName .. " Batch " .. batchNum .. " / " .. math.ceil(total / bSize) .. " Done")
             currentIdx, batchNum = endIdx + 1, batchNum + 1
             if currentIdx > total then
                 self:SetScript("OnUpdate", nil)
-                print("|cff00ff00GildeaOrdo:|r All " .. actionName .. " operations completed.")
-                if GildeaOrdo.RequestRosterAfterAction then GildeaOrdo:RequestRosterAfterAction() else GuildRoster() end
+                print("|cff00ff00GuildeaOrdo:|r All " .. actionName .. " operations completed.")
+                if GuildeaOrdo.RequestRosterAfterAction then GuildeaOrdo:RequestRosterAfterAction() else GuildRoster() end
             end
         end
     end)
@@ -136,7 +136,7 @@ end
 local function build()
     if UI.frame then return UI.frame end
 
-    local f = CreateFrame("Frame", "GildeaOrdoMainFrame", UIParent)
+    local f = CreateFrame("Frame", "GuildeaOrdoMainFrame", UIParent)
     f:SetSize(900, 480)
     f:SetPoint("CENTER")
     f:SetBackdrop(UI.BACKDROP)
@@ -150,7 +150,7 @@ local function build()
     -- Header
     f.title = f:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
     f.title:SetPoint("TOPLEFT", 18, -18)
-    f.title:SetText("|cFFFFCC00GildeaOrdo|r")
+    f.title:SetText("|cFFFFCC00GuildeaOrdo|r")
     f.subtitle = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     f.subtitle:SetPoint("RIGHT", f.title ,"RIGHT",330, 0)
     f.rightHeader = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
@@ -219,7 +219,7 @@ local function build()
     f.listPanel:SetPoint("TOPLEFT", 16, -160); f.listPanel:SetPoint("BOTTOMRIGHT", -180, 56)
     f.listPanel:SetBackdrop(UI.PANEL_BACKDROP); f.listPanel:SetBackdropColor(0, 0, 0, 0.6)
 
-    f.scroll = CreateFrame("ScrollFrame", "GildeaOrdoListScroll", f.listPanel, "FauxScrollFrameTemplate")
+    f.scroll = CreateFrame("ScrollFrame", "GuildeaOrdoListScroll", f.listPanel, "FauxScrollFrameTemplate")
     f.scroll:SetPoint("TOPLEFT", 6, -6); f.scroll:SetPoint("BOTTOMRIGHT", -28, 6)
     f.scroll:SetScript("OnVerticalScroll", function(self, offset)
         FauxScrollFrame_OnVerticalScroll(self, offset, UI.ROW_HEIGHT, function() UI:Refresh() end)
@@ -265,11 +265,11 @@ local function build()
     f.status = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     f.status:SetPoint("BOTTOMLEFT", 16, 14)
 
-    _G["GildeaOrdoMainFrame"] = f
-    table.insert(UISpecialFrames, "GildeaOrdoMainFrame")
+    _G["GuildeaOrdoMainFrame"] = f
+    table.insert(UISpecialFrames, "GuildeaOrdoMainFrame")
     if GuildFrame then
-        GuildFrame:HookScript("OnShow", function() if GildeaOrdoCharDB and GildeaOrdoCharDB.openWithGuild then if not f:IsShown() then UI:Show() end end end)
-        GuildFrame:HookScript("OnHide", function() if GildeaOrdoCharDB and GildeaOrdoCharDB.closeWithGuild then if f:IsShown() then UI:Hide() end end end)
+        GuildFrame:HookScript("OnShow", function() if GuildeaOrdoCharDB and GuildeaOrdoCharDB.openWithGuild then if not f:IsShown() then UI:Show() end end end)
+        GuildFrame:HookScript("OnHide", function() if GuildeaOrdoCharDB and GuildeaOrdoCharDB.closeWithGuild then if f:IsShown() then UI:Hide() end end end)
     end
     UI.frame = f
     return f
@@ -346,12 +346,12 @@ function UI:Refresh()
 
     setVis(f.slashCmdLabel, settingsMode); setVis(f.slashCmdText, settingsMode); setVis(f.batchSizeLabel, settingsMode); setVis(f.batchSizeInput, settingsMode); setVis(f.openWithGuildCB, settingsMode); setVis(f.openWithGuildLabel, settingsMode); setVis(f.closeWithGuildCB, settingsMode); setVis(f.closeWithGuildLabel, settingsMode); setVis(f.bracketInfoLabel, settingsMode); setVis(f.bLeftLbl, settingsMode); setVis(f.bLeft, settingsMode); setVis(f.bRightLbl, settingsMode); setVis(f.bRight, settingsMode); setVis(f.showMinimapCB, settingsMode); setVis(f.showMinimapLabel, settingsMode); setVis(f.minimapCtrlLabel, settingsMode); setVis(f.minimapRotSlider, settingsMode); setVis(f.minimapRotLabel, settingsMode); setVis(f.minimapRotVal, settingsMode); setVis(f.minimapRotLow, settingsMode); setVis(f.minimapRotHigh, settingsMode); setVis(f.minimapDistSlider, settingsMode); setVis(f.minimapDistLabel, settingsMode); setVis(f.minimapDistVal, settingsMode); setVis(f.minimapDistLow, settingsMode); setVis(f.minimapDistHigh, settingsMode); setVis(f.autoInvLabel, settingsMode); setVis(f.autoInvCB, settingsMode); setVis(f.autoInvCBLabel, settingsMode); setVis(f.autoInvBg, settingsMode); setVis(f.aiPhraseBg, settingsMode); setVis(f.aiPhraseLbl, settingsMode); setVis(f.aiOnBg, settingsMode); setVis(f.aiOnLbl, settingsMode); setVis(f.aiOffBg, settingsMode); setVis(f.aiOffLbl, settingsMode); setVis(f.aiMinLvlBg, settingsMode); setVis(f.aiMinLvlLbl, settingsMode); setVis(f.aiReplyLowBg, settingsMode); setVis(f.aiReplyLowLbl, settingsMode); setVis(f.groupInviteLabel, settingsMode); setVis(f.groupInviteCheck, settingsMode); setVis(f.groupInviteEditBox, settingsMode); setVis(f.groupInviteEditBoxLabel, settingsMode); setVis(f.groupInvitePermCheck, settingsMode); setVis(f.groupInviteMinLabel, settingsMode); setVis(f.groupInviteMinutes, settingsMode); setVis(f.groupInviteBg, settingsMode); setVis(f.shareBlacklistBtn, settingsMode); setVis(f.autoBanLeaveCB, settingsMode); setVis(f.autoBanLeaveLabel, settingsMode); setVis(f.blacklistBtn, settingsMode)
 
-    if settingsMode and GildeaOrdoDB then
-        if not f.batchSizeInput:HasFocus() then f.batchSizeInput:SetText(tostring(GildeaOrdoDB.batchSize or 2)) end
-            if f.bLeft and not f.bLeft:HasFocus() then f.bLeft:SetText(GildeaOrdoDB.bracketLeft or "[") end
-                if f.bRight and not f.bRight:HasFocus() then f.bRight:SetText(GildeaOrdoDB.bracketRight or "]") end
-                            if GildeaOrdoCharDB.autoInvite then
-            local conf = GildeaOrdoCharDB.autoInvite
+    if settingsMode and GuildeaOrdoDB then
+        if not f.batchSizeInput:HasFocus() then f.batchSizeInput:SetText(tostring(GuildeaOrdoDB.batchSize or 2)) end
+            if f.bLeft and not f.bLeft:HasFocus() then f.bLeft:SetText(GuildeaOrdoDB.bracketLeft or "[") end
+                if f.bRight and not f.bRight:HasFocus() then f.bRight:SetText(GuildeaOrdoDB.bracketRight or "]") end
+                            if GuildeaOrdoCharDB.autoInvite then
+            local conf = GuildeaOrdoCharDB.autoInvite
             f.autoInvCB:SetChecked(conf.enabled)
             if not f.aiPhrase:HasFocus() then f.aiPhrase:SetText(conf.phrase or "") end
             if not f.aiOn:HasFocus() then f.aiOn:SetText(conf.replyOn or "") end
@@ -365,7 +365,7 @@ function UI:Refresh()
     if macrosMode then
         if f.macroSpamCB then f.macroSpamCB:SetChecked(addon.spamActive) end
         if f.macroSpamInterval and not f.macroSpamInterval:HasFocus() then f.macroSpamInterval:SetText(tostring(addon.spamInterval or 5)) end
-        if f.macroSpamTotal and not f.macroSpamTotal:HasFocus() then local t = (GildeaOrdoDB and GildeaOrdoDB.spamTotalMinutes) or addon.spamTotalLimit or 0; f.macroSpamTotal:SetText(tostring(t)); addon.spamTotalLimit = t end
+        if f.macroSpamTotal and not f.macroSpamTotal:HasFocus() then local t = (GuildeaOrdoDB and GuildeaOrdoDB.spamTotalMinutes) or addon.spamTotalLimit or 0; f.macroSpamTotal:SetText(tostring(t)); addon.spamTotalLimit = t end
     end
 
     for view, b in pairs(f.tabButtons) do if view == UI.activeView then b:LockHighlight() else b:UnlockHighlight() end end
@@ -382,11 +382,11 @@ function UI:Refresh()
     local data, total, onlineCount = {}, 0, 0
     if settingsMode then
         f.rightHeader:SetText(("Version |cffffffff%s|r"):format(addon.version or "?")); f.rightHeader:Show(); f.rrightHeader:Hide()
-        if GildeaOrdoCharDB then f.openWithGuildCB:SetChecked(GildeaOrdoCharDB.openWithGuild); f.closeWithGuildCB:SetChecked(GildeaOrdoCharDB.closeWithGuild) end
-        if f.showMinimapCB then f.showMinimapCB:SetChecked(GildeaOrdoDB.showMinimapButton ~= false) end
-        if f.autoBanLeaveCB then f.autoBanLeaveCB:SetChecked(GildeaOrdoDB.autoBanOnLeave == true) end
-        if f.minimapRotSlider then local r = GildeaOrdoDB.minimapRotation or 0; f.minimapRotSlider:SetValue(r); if f.minimapRotVal then f.minimapRotVal:SetText(tostring(r)) end end
-        if f.minimapDistSlider then local d = math.max(20, math.min(240, GildeaOrdoDB.minimapDistance or 80)); if GildeaOrdoDB then GildeaOrdoDB.minimapDistance = d end; f.minimapDistSlider:SetValue(d); if f.minimapDistVal then f.minimapDistVal:SetText(tostring(d)) end end
+        if GuildeaOrdoCharDB then f.openWithGuildCB:SetChecked(GuildeaOrdoCharDB.openWithGuild); f.closeWithGuildCB:SetChecked(GuildeaOrdoCharDB.closeWithGuild) end
+        if f.showMinimapCB then f.showMinimapCB:SetChecked(GuildeaOrdoDB.showMinimapButton ~= false) end
+        if f.autoBanLeaveCB then f.autoBanLeaveCB:SetChecked(GuildeaOrdoDB.autoBanOnLeave == true) end
+        if f.minimapRotSlider then local r = GuildeaOrdoDB.minimapRotation or 0; f.minimapRotSlider:SetValue(r); if f.minimapRotVal then f.minimapRotVal:SetText(tostring(r)) end end
+        if f.minimapDistSlider then local d = math.max(20, math.min(240, GuildeaOrdoDB.minimapDistance or 80)); if GuildeaOrdoDB then GuildeaOrdoDB.minimapDistance = d end; f.minimapDistSlider:SetValue(d); if f.minimapDistVal then f.minimapDistVal:SetText(tostring(d)) end end
     elseif logMode then data, total = UI.CollectLogRows(); f.rightHeader:SetText(("Total Entries: |cffffffff%d|r"):format(total))
     elseif rosterMode then data, onlineCount, total = UI.CollectRosterRows(); addon.RosterRowsCache = data; f.rightHeader:SetText(("|cffffffff%d|r / %d Online"):format(onlineCount, total))
     elseif ranksMode then data = UI.CollectRanksRows(); addon.RanksRowsCache = data; f.rightHeader:SetText(("|cffffffff%d|r Candidates matching criteria"):format(#data))
@@ -492,7 +492,7 @@ function UI:Refresh()
                                 if not hasActive and addon.spamActive then
                                     addon.spamActive = false
                                     if f.macroSpamCB then f.macroSpamCB:SetChecked(false) end
-                                    print("|cFFFFCC00GildeaOrdo|r: Macro Spam Ended (All macros removed).")
+                                    print("|cFFFFCC00GuildeaOrdo|r: Macro Spam Ended (All macros removed).")
                                     end
                                 end
                     UI:Refresh()
@@ -500,20 +500,20 @@ function UI:Refresh()
                     btns.edit:SetScript("OnClick", function()
                         if (f.macroMsg:GetText() or "") == "" then
                             f.macroMsg:SetText(txt); UI.macroSelectedChannel = chan; addon.editingMacroIndex = idx; UI:Refresh()
-                        else print("|cFFFFCC00GildeaOrdo|r: Clear the message box first to edit.") end
+                        else print("|cFFFFCC00GuildeaOrdo|r: Clear the message box first to edit.") end
                     end)
                     btns.set:SetScript("OnClick", function()
                     addon.spamMacros = addon.spamMacros or {}; addon.spamMacros[idx] = not addon.spamMacros[idx]
                     if addon.spamMacros[idx] then
-                        print("|cFFFFCC00GildeaOrdo|r: Macro added to spam rotation.")
+                        print("|cFFFFCC00GuildeaOrdo|r: Macro added to spam rotation.")
                         else
-                            print("|cFFFFCC00GildeaOrdo|r: Macro removed from spam rotation.")
+                            print("|cFFFFCC00GuildeaOrdo|r: Macro removed from spam rotation.")
                             local hasActive = false
                             for _, v in pairs(addon.spamMacros) do if v then hasActive = true; break end end
                                 if not hasActive and addon.spamActive then
                                 addon.spamActive = false
                                 if f.macroSpamCB then f.macroSpamCB:SetChecked(false) end
-                                print("|cFFFFCC00GildeaOrdo|r: Macro Spam Ended (No active macros).")
+                                print("|cFFFFCC00GuildeaOrdo|r: Macro Spam Ended (No active macros).")
                                 end
                         end
                     UI:Refresh()
@@ -527,4 +527,4 @@ end
 function UI:RefreshIfShown() if UI.frame and UI.frame:IsShown() then UI:Refresh() end end
 function UI:Toggle() local f = build(); if f:IsShown() then UI:Hide() else UI:Show() end end
 function UI:Show() local f = build(); f:Show(); UI:Refresh() end
-function UI:Hide() if UI.frame then UI.frame:Hide() end; if UI.HideBlacklistDetail then UI:HideBlacklistDetail() end; if GildeaOrdoBlacklistFrame and GildeaOrdoBlacklistFrame:IsShown() then GildeaOrdoBlacklistFrame:Hide() end end
+function UI:Hide() if UI.frame then UI.frame:Hide() end; if UI.HideBlacklistDetail then UI:HideBlacklistDetail() end; if GuildeaOrdoBlacklistFrame and GuildeaOrdoBlacklistFrame:IsShown() then GuildeaOrdoBlacklistFrame:Hide() end end

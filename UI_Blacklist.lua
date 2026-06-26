@@ -1,5 +1,5 @@
--- GildeaOrdo Blacklist UI Module
-local addon = GildeaOrdo
+-- GuildeaOrdo Blacklist UI Module
+local addon = GuildeaOrdo
 local UI    = addon.UI
 
 local blacklistFrame
@@ -20,7 +20,7 @@ end
 
 local function buildBlacklistWindow()
     if blacklistFrame then return blacklistFrame end
-    local f = CreateFrame("Frame", "GildeaOrdoBlacklistFrame", UIParent)
+    local f = CreateFrame("Frame", "GuildeaOrdoBlacklistFrame", UIParent)
     f:SetSize(390, 380); f:SetPoint("CENTER", 0, 50); f:SetBackdrop(UI.BACKDROP); f:SetBackdropColor(0, 0, 0, 1); f:SetMovable(true); f:EnableMouse(true); f:SetClampedToScreen(true); f:SetFrameStrata("HIGH")
     f:RegisterForDrag("LeftButton"); f:SetScript("OnDragStart", f.StartMoving); f:SetScript("OnDragStop", f.StopMovingOrSizing); f:Hide()
 
@@ -28,7 +28,7 @@ local function buildBlacklistWindow()
     local close = CreateFrame("Button", nil, f, "UIPanelCloseButton"); close:SetPoint("TOPRIGHT", 2, 2)
 
     local nameLabel = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall"); nameLabel:SetPoint("TOPLEFT", 21, -48); nameLabel:SetText("Player Name")
-    local nameInput = CreateFrame("EditBox", "GildeaOrdoBLNameInput", f, "InputBoxTemplate")
+    local nameInput = CreateFrame("EditBox", "GuildeaOrdoBLNameInput", f, "InputBoxTemplate")
     nameInput:SetSize(180, 20); nameInput:SetPoint("TOPLEFT", nameLabel, "BOTTOMLEFT", 2, -2); nameInput:SetAutoFocus(false)
     nameInput:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
     nameInput:SetScript("OnEnterPressed", function(self) local n = self:GetText(); if n and n ~= "" then addon:AddToBlacklist(n); self:SetText("") end; self:ClearFocus(); UI:RefreshBlacklistWindow() end)
@@ -40,12 +40,12 @@ local function buildBlacklistWindow()
 
     local purgeBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate"); purgeBtn:SetSize(60, 22); purgeBtn:SetText("|cFFFFCC00Purge List|r"); if purgeBtn:GetFontString() then purgeBtn:GetFontString():SetTextColor(1, 0.3, 0.3) end
     purgeBtn:SetPoint("LEFT", addBtn, "RIGHT", 8, 0)
-    purgeBtn:SetScript("OnClick", function() StaticPopupDialogs["GildeaOrdo_CONFIRM_PURGE_BL_1"] = { text = "Are you sure you want to clear the Blacklist?", button1 = "Yes", button2 = "Cancel", OnAccept = function() StaticPopupDialogs["GildeaOrdo_CONFIRM_PURGE_BL_2"] = { text = "WARNING: This will permanently delete ALL entries. Are you absolutely sure?", button1 = "PURGE ALL", button2 = "Cancel", OnAccept = function() if addon.ClearBlacklist then addon:ClearBlacklist() end end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }; StaticPopup_Show("GildeaOrdo_CONFIRM_PURGE_BL_2") end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }; StaticPopup_Show("GildeaOrdo_CONFIRM_PURGE_BL_1") end)
+    purgeBtn:SetScript("OnClick", function() StaticPopupDialogs["GuildeaOrdo_CONFIRM_PURGE_BL_1"] = { text = "Are you sure you want to clear the Blacklist?", button1 = "Yes", button2 = "Cancel", OnAccept = function() StaticPopupDialogs["GuildeaOrdo_CONFIRM_PURGE_BL_2"] = { text = "WARNING: This will permanently delete ALL entries. Are you absolutely sure?", button1 = "PURGE ALL", button2 = "Cancel", OnAccept = function() if addon.ClearBlacklist then addon:ClearBlacklist() end end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }; StaticPopup_Show("GuildeaOrdo_CONFIRM_PURGE_BL_2") end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }; StaticPopup_Show("GuildeaOrdo_CONFIRM_PURGE_BL_1") end)
 
     local listPanel = CreateFrame("Frame", nil, f)
     listPanel:SetPoint("TOPLEFT", 16, -85); listPanel:SetPoint("BOTTOMRIGHT", -16, 120); listPanel:SetBackdrop(UI.PANEL_BACKDROP); listPanel:SetBackdropColor(0, 0, 0, 0.6)
 
-    local scroll = CreateFrame("ScrollFrame", "GildeaOrdoBLScroll", listPanel, "FauxScrollFrameTemplate")
+    local scroll = CreateFrame("ScrollFrame", "GuildeaOrdoBLScroll", listPanel, "FauxScrollFrameTemplate")
     scroll:SetPoint("TOPLEFT", 4, -4); scroll:SetPoint("BOTTOMRIGHT", -26, 4)
     scroll:SetScript("OnVerticalScroll", function(self, offset) FauxScrollFrame_OnVerticalScroll(self, offset, BL_ROW_HEIGHT, function() UI:RefreshBlacklistWindow() end) end)
 
@@ -67,13 +67,13 @@ local function buildBlacklistWindow()
 
     local arLabel = f:CreateFontString(nil, "OVERLAY", "GameFontNormal"); arLabel:SetPoint("BOTTOMLEFT", 24, 100); arLabel:SetText("|cFFFFCC00Autoresponse (sent to blacklisted players on trigger)|r"); arLabel:SetTextColor(1, 0.8, 0)
     local arBg = CreateFrame("Frame", nil, f); arBg:SetPoint("TOPLEFT", arLabel, "BOTTOMLEFT", -6, -2); arBg:SetPoint("BOTTOMRIGHT", -18, 34); arBg:SetBackdrop(UI.PANEL_BACKDROP); arBg:SetBackdropColor(0, 0, 0, 0.7); arBg:SetBackdropBorderColor(0.5, 0.5, 0.5, 1)
-    local arEdit = CreateFrame("EditBox", "GildeaOrdoBLReplyEdit", arBg); arEdit:SetFontObject("ChatFontSmall"); arEdit:SetAutoFocus(false); arEdit:SetMultiLine(true); arEdit:SetMaxLetters(200); arEdit:SetPoint("TOPLEFT", 6, -4); arEdit:SetPoint("BOTTOMRIGHT", -6, 4); arEdit:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+    local arEdit = CreateFrame("EditBox", "GuildeaOrdoBLReplyEdit", arBg); arEdit:SetFontObject("ChatFontSmall"); arEdit:SetAutoFocus(false); arEdit:SetMultiLine(true); arEdit:SetMaxLetters(200); arEdit:SetPoint("TOPLEFT", 6, -4); arEdit:SetPoint("BOTTOMRIGHT", -6, 4); arEdit:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
     
     local saveReplyBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate"); saveReplyBtn:SetSize(70, 22); saveReplyBtn:SetText("|cFFFFCC00Save|r"); if saveReplyBtn:GetFontString() then saveReplyBtn:GetFontString():SetTextColor(1, 0.8, 0) end; saveReplyBtn:SetPoint("BOTTOMRIGHT", -18, 8)
-    saveReplyBtn:SetScript("OnClick", function() addon:SetBlacklistReply(arEdit:GetText() or ""); print("|cFFFFCC00GildeaOrdo|r: Blacklist autoresponse saved.") end)
+    saveReplyBtn:SetScript("OnClick", function() addon:SetBlacklistReply(arEdit:GetText() or ""); print("|cFFFFCC00GuildeaOrdo|r: Blacklist autoresponse saved.") end)
 
     f.arEdit = arEdit; f.scroll = scroll; f.nameInput = nameInput
-    _G["GildeaOrdoBlacklistFrame"] = f; table.insert(UISpecialFrames, "GildeaOrdoBlacklistFrame")
+    _G["GuildeaOrdoBlacklistFrame"] = f; table.insert(UISpecialFrames, "GuildeaOrdoBlacklistFrame")
     f:HookScript("OnShow", function() positionBlacklistWindow(f); UI:RefreshBlacklistWindow() end)
     f:HookScript("OnHide", function() if blacklistDetailFrame then blacklistDetailFrame:Hide() end; selectedBlacklistName = nil end)
     blacklistFrame = f
@@ -117,7 +117,7 @@ function UI:ToggleBlacklistWindow() local f = buildBlacklistWindow(); if f then 
 
 local function buildBlacklistDetail()
     if blacklistDetailFrame then return blacklistDetailFrame end
-    local f = CreateFrame("Frame", "GildeaOrdoBlacklistDetailFrame", UIParent)
+    local f = CreateFrame("Frame", "GuildeaOrdoBlacklistDetailFrame", UIParent)
     f:SetSize(390, 165); f:SetBackdrop(UI.BACKDROP); f:SetBackdropColor(0, 0, 0, 1); f:SetMovable(true); f:EnableMouse(true); f:SetClampedToScreen(true); f:SetFrameStrata("HIGH")
     f:RegisterForDrag("LeftButton"); f:SetScript("OnDragStart", f.StartMoving); f:SetScript("OnDragStop", f.StopMovingOrSizing); f:Hide()
     local close = CreateFrame("Button", nil, f, "UIPanelCloseButton"); close:SetPoint("TOPRIGHT", 2, 2)
@@ -130,7 +130,7 @@ local function buildBlacklistDetail()
     f.noteLabel = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall"); f.noteLabel:SetPoint("TOPLEFT", 16, -46); f.noteLabel:SetText("|cFFFFCC00Local Note:|r")
     local noteBg = CreateFrame("Frame", nil, f); noteBg:SetPoint("TOPLEFT", f.noteLabel, "BOTTOMLEFT", 0, -2); noteBg:SetPoint("RIGHT", f.removeBtn, "RIGHT", 0, 0); noteBg:SetHeight(75); noteBg:SetBackdrop(UI.PANEL_BACKDROP); noteBg:SetBackdropColor(0, 0, 0, 0.7); noteBg:SetBackdropBorderColor(0.5, 0.5, 0.5, 1)
 
-    f.noteEdit = CreateFrame("EditBox", "GildeaOrdoBLDetailNote", noteBg); f.noteEdit:SetFontObject("ChatFontSmall"); f.noteEdit:SetAutoFocus(false); f.noteEdit:SetMultiLine(true); f.noteEdit:SetMaxLetters(200); f.noteEdit:SetPoint("TOPLEFT", 6, -2); f.noteEdit:SetPoint("BOTTOMRIGHT", -4, 2); f.noteEdit:SetScript("OnEscapePressed", function(self) self:ClearFocus() end); f.noteEdit:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
+    f.noteEdit = CreateFrame("EditBox", "GuildeaOrdoBLDetailNote", noteBg); f.noteEdit:SetFontObject("ChatFontSmall"); f.noteEdit:SetAutoFocus(false); f.noteEdit:SetMultiLine(true); f.noteEdit:SetMaxLetters(200); f.noteEdit:SetPoint("TOPLEFT", 6, -2); f.noteEdit:SetPoint("BOTTOMRIGHT", -4, 2); f.noteEdit:SetScript("OnEscapePressed", function(self) self:ClearFocus() end); f.noteEdit:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
     f.noteEdit:SetScript("OnEditFocusLost", function(self) if selectedBlacklistName then addon:SetBlacklistNote(selectedBlacklistName, self:GetText() or "") end end)
 
     local saveNoteBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate"); saveNoteBtn:SetSize(60, 22); saveNoteBtn:SetText("|cFFFFCC00Save|r"); if saveNoteBtn:GetFontString() then saveNoteBtn:GetFontString():SetTextColor(1, 0.8, 0) end

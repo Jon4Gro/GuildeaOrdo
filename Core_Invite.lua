@@ -1,5 +1,5 @@
--- GildeaOrdo Auto-Invite & Group-Invite Logic
-local addon = GildeaOrdo
+-- GuildeaOrdo Auto-Invite & Group-Invite Logic
+local addon = GuildeaOrdo
 
 -- =========================================================
 -- Helper: Multiple Trigger Words separated by '-'
@@ -26,7 +26,7 @@ function addon:ProcessWhoLevelCheck()
     local num = GetNumWhoResults()
     if num == 0 then return end
 
-    local conf = GildeaOrdoDB and GildeaOrdoCharDB.autoInvite
+    local conf = GuildeaOrdoDB and GuildeaOrdoCharDB.autoInvite
     if not conf then 
         addon.pendingLevelChecks = {}
         return 
@@ -107,7 +107,7 @@ addon.groupInvitePermanent = false
 
 function addon:StartGroupInvite(minutes)
     self.groupInviteActive = true
-    print("|cFFFFCC00GildeaOrdo|r: Group Auto-Invite mode enabled.")
+    print("|cFFFFCC00GuildeaOrdo|r: Group Auto-Invite mode enabled.")
     if not self.groupInvitePermanent then
         local mins = tonumber(minutes) or 15
         if mins > 0 then
@@ -122,7 +122,7 @@ end
 
 function addon:StopGroupInvite()
     self.groupInviteActive = false
-    print("|cFFFFCC00GildeaOrdo|r: Group Auto-Invite mode disabled.")
+    print("|cFFFFCC00GuildeaOrdo|r: Group Auto-Invite mode disabled.")
     if addon.UI and addon.UI.RefreshIfShown then addon.UI:RefreshIfShown() end
 end
 

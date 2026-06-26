@@ -1,5 +1,5 @@
--- GildeaOrdo Ranks UI Module
-local addon = GildeaOrdo
+-- GuildeaOrdo Ranks UI Module
+local addon = GuildeaOrdo
 local UI    = addon.UI
 
 local function parseJoinDateToDays(dateStr)
@@ -45,12 +45,12 @@ function UI.BuildRanks(f)
         end
         local minDays, maxOff = mkEb(nameStr), mkEb(mkEb(nameStr))
 
-        local saved = GildeaOrdoCharDB and GildeaOrdoCharDB.massPromote and GildeaOrdoCharDB.massPromote[i] or {}
+        local saved = GuildeaOrdoCharDB and GuildeaOrdoCharDB.massPromote and GuildeaOrdoCharDB.massPromote[i] or {}
         cb:SetChecked(saved.checked or false); minDays:SetText(saved.minDays or ""); maxOff:SetText(saved.maxOff or "")
 
-        cb:SetScript("OnClick", function(self) if GildeaOrdoCharDB then GildeaOrdoCharDB.massPromote[i] = GildeaOrdoCharDB.massPromote[i] or {}; GildeaOrdoCharDB.massPromote[i].checked = self:GetChecked() and true or false end; UI:Refresh() end)
-        minDays:SetScript("OnTextChanged", function(self) if GildeaOrdoCharDB then GildeaOrdoCharDB.massPromote[i] = GildeaOrdoCharDB.massPromote[i] or {}; GildeaOrdoCharDB.massPromote[i].minDays = self:GetText() end; UI:Refresh() end)
-        maxOff:SetScript("OnTextChanged", function(self) if GildeaOrdoCharDB then GildeaOrdoCharDB.massPromote[i] = GildeaOrdoCharDB.massPromote[i] or {}; GildeaOrdoCharDB.massPromote[i].maxOff = self:GetText() end; UI:Refresh() end)
+        cb:SetScript("OnClick", function(self) if GuildeaOrdoCharDB then GuildeaOrdoCharDB.massPromote[i] = GuildeaOrdoCharDB.massPromote[i] or {}; GuildeaOrdoCharDB.massPromote[i].checked = self:GetChecked() and true or false end; UI:Refresh() end)
+        minDays:SetScript("OnTextChanged", function(self) if GuildeaOrdoCharDB then GuildeaOrdoCharDB.massPromote[i] = GuildeaOrdoCharDB.massPromote[i] or {}; GuildeaOrdoCharDB.massPromote[i].minDays = self:GetText() end; UI:Refresh() end)
+        maxOff:SetScript("OnTextChanged", function(self) if GuildeaOrdoCharDB then GuildeaOrdoCharDB.massPromote[i] = GuildeaOrdoCharDB.massPromote[i] or {}; GuildeaOrdoCharDB.massPromote[i].maxOff = self:GetText() end; UI:Refresh() end)
 
         f.rankRows[i] = { frame = row, cb = cb, nameStr = nameStr, minDays = minDays, maxOff = maxOff }
     end
@@ -65,9 +65,9 @@ function UI.BuildRanks(f)
     if f.ranksMultiPromoteBtn:GetFontString() then f.ranksMultiPromoteBtn:GetFontString():SetTextColor(1, 0.8, 0) end
     f.ranksMultiPromoteBtn:SetScript("OnClick", function()
         local rows = addon.RanksRowsCache or {}
-        if #rows == 0 then print("|cff00ff00GildeaOrdo:|r No members match the selected conditions."); return end
-        StaticPopupDialogs["GildeaOrdo_CONFIRM_MULTI_PROMOTE"] = { text = "Are you sure you want to promote these |cffffff00" .. #rows .. "|r members?", button1 = "Promote All", button2 = "Cancel", OnAccept = function() UI.ProcessBatch("Mass Promote", rows, function(name) if not addon:IsWhitelisted(name) then if GuildPromote then GuildPromote(name) end end end) end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }
-        StaticPopup_Show("GildeaOrdo_CONFIRM_MULTI_PROMOTE")
+        if #rows == 0 then print("|cff00ff00GuildeaOrdo:|r No members match the selected conditions."); return end
+        StaticPopupDialogs["GuildeaOrdo_CONFIRM_MULTI_PROMOTE"] = { text = "Are you sure you want to promote these |cffffff00" .. #rows .. "|r members?", button1 = "Promote All", button2 = "Cancel", OnAccept = function() UI.ProcessBatch("Mass Promote", rows, function(name) if not addon:IsWhitelisted(name) then if GuildPromote then GuildPromote(name) end end end) end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }
+        StaticPopup_Show("GuildeaOrdo_CONFIRM_MULTI_PROMOTE")
     end)
 end
 
@@ -76,8 +76,8 @@ local guild = addon:GetCurrentGuild()
 local rows = {}
 if not guild or not UI.frame or not UI.frame.rankRows then return rows end
 
-    local lMag = addon.escapePattern(GildeaOrdoDB and GildeaOrdoDB.bracketLeft or "[")
-    local rMag = addon.escapePattern(GildeaOrdoDB and GildeaOrdoDB.bracketRight or "]")
+    local lMag = addon.escapePattern(GuildeaOrdoDB and GuildeaOrdoDB.bracketLeft or "[")
+    local rMag = addon.escapePattern(GuildeaOrdoDB and GuildeaOrdoDB.bracketRight or "]")
     local numRanks = GuildControlGetNumRanks() or 0
 
     -- Force Show Offline temporarily to ensure we scan the whole roster
@@ -95,7 +95,7 @@ if not guild or not UI.frame or not UI.frame.rankRows then return rows end
                 local minDays = tonumber(rowUI.minDays:GetText()) or 0
                 local maxOff = tonumber(rowUI.maxOff:GetText())
                 local rec = guild.members[name]
-                local extractedDate = (officerNote and string.match(officerNote, (GildeaOrdoDB and GildeaOrdoDB.bracketLeftMagic or "%[") .. "(%S+ %d%d %d%d%d%d)" .. (GildeaOrdoDB and GildeaOrdoDB.bracketRightMagic or "%]"))) or ((rec and rec.joinDateExact) and rec.joinDate) or nil
+                local extractedDate = (officerNote and string.match(officerNote, (GuildeaOrdoDB and GuildeaOrdoDB.bracketLeftMagic or "%[") .. "(%S+ %d%d %d%d%d%d)" .. (GuildeaOrdoDB and GuildeaOrdoDB.bracketRightMagic or "%]"))) or ((rec and rec.joinDateExact) and rec.joinDate) or nil
 
                 local serverEpoch
                 if not isOnline then

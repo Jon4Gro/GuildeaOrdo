@@ -1,17 +1,17 @@
--- GildeaOrdo Blacklist API (account-wide, used by both Auto Guild Invite and Auto Group Invite)
-local addon = GildeaOrdo
+-- GuildeaOrdo Blacklist API (account-wide, used by both Auto Guild Invite and Auto Group Invite)
+local addon = GuildeaOrdo
 
 function addon:AddToBlacklist(name, note)
     if not name or name == "" then return false end
-    GildeaOrdoDB.blacklist = GildeaOrdoDB.blacklist or {}
+    GuildeaOrdoDB.blacklist = GuildeaOrdoDB.blacklist or {}
     local clean = strsplit("-", name or ""):lower()
     if clean == "" then return false end
-    local prev = GildeaOrdoDB.blacklist[clean]
+    local prev = GuildeaOrdoDB.blacklist[clean]
     if note and note ~= "" then
-        GildeaOrdoDB.blacklist[clean] = note
+        GuildeaOrdoDB.blacklist[clean] = note
     else
         if prev == nil or type(prev) == "boolean" then
-            GildeaOrdoDB.blacklist[clean] = ""
+            GuildeaOrdoDB.blacklist[clean] = ""
         end
     end
     if addon.UI and addon.UI.RefreshBlacklistWindow then addon.UI:RefreshBlacklistWindow() end
@@ -20,32 +20,32 @@ function addon:AddToBlacklist(name, note)
 end
 
 function addon:RemoveFromBlacklist(name)
-    if not name or not GildeaOrdoDB or not GildeaOrdoDB.blacklist then return end
+    if not name or not GuildeaOrdoDB or not GuildeaOrdoDB.blacklist then return end
     local clean = strsplit("-", name or ""):lower()
-    GildeaOrdoDB.blacklist[clean] = nil
+    GuildeaOrdoDB.blacklist[clean] = nil
     if addon.UI and addon.UI.RefreshBlacklistWindow then addon.UI:RefreshBlacklistWindow() end
     if addon.UI and addon.UI.HideBlacklistDetail then addon.UI:HideBlacklistDetail() end
 end
 
 function addon:ClearBlacklist()
-    if not GildeaOrdoDB or not GildeaOrdoDB.blacklist then return end
-    GildeaOrdoDB.blacklist = {}
+    if not GuildeaOrdoDB or not GuildeaOrdoDB.blacklist then return end
+    GuildeaOrdoDB.blacklist = {}
     if addon.UI and addon.UI.RefreshBlacklistWindow then addon.UI:RefreshBlacklistWindow() end
     if addon.UI and addon.UI.HideBlacklistDetail then addon.UI:HideBlacklistDetail() end
 end
 
 function addon:IsBlacklisted(name)
-    if not name or not GildeaOrdoDB or not GildeaOrdoDB.blacklist then return false end
+    if not name or not GuildeaOrdoDB or not GuildeaOrdoDB.blacklist then return false end
     local clean = strsplit("-", name or ""):lower()
-    return GildeaOrdoDB.blacklist[clean] ~= nil
+    return GuildeaOrdoDB.blacklist[clean] ~= nil
 end
 
 function addon:GetBlacklist(filterText)
-    if not GildeaOrdoDB or not GildeaOrdoDB.blacklist then return {} end
+    if not GuildeaOrdoDB or not GuildeaOrdoDB.blacklist then return {} end
     local list = {}
     local filter = filterText and filterText:lower():match("^%s*(.-)%s*$") or ""
     
-    for k in pairs(GildeaOrdoDB.blacklist) do
+    for k in pairs(GuildeaOrdoDB.blacklist) do
         if filter == "" or k:find(filter, 1, true) then
             table.insert(list, k)
         end
@@ -55,41 +55,41 @@ function addon:GetBlacklist(filterText)
 end
 
 function addon:GetBlacklistNote(name)
-    if not name or not GildeaOrdoDB or not GildeaOrdoDB.blacklist then return "" end
+    if not name or not GuildeaOrdoDB or not GuildeaOrdoDB.blacklist then return "" end
     local clean = strsplit("-", name or ""):lower()
-    local v = GildeaOrdoDB.blacklist[clean]
+    local v = GuildeaOrdoDB.blacklist[clean]
     if type(v) == "string" then return v end
     return ""
 end
 
 function addon:SetBlacklistNote(name, noteText)
     if not name or name == "" then return end
-    GildeaOrdoDB.blacklist = GildeaOrdoDB.blacklist or {}
+    GuildeaOrdoDB.blacklist = GuildeaOrdoDB.blacklist or {}
     local clean = strsplit("-", name or ""):lower()
     if clean == "" then return end
-    if GildeaOrdoDB.blacklist[clean] == nil then return end
-    GildeaOrdoDB.blacklist[clean] = noteText or ""
+    if GuildeaOrdoDB.blacklist[clean] == nil then return end
+    GuildeaOrdoDB.blacklist[clean] = noteText or ""
     if addon.UI and addon.UI.RefreshBlacklistDetail then addon.UI:RefreshBlacklistDetail() end
 end
 
 function addon:GetBlacklistReply()
-    return (GildeaOrdoDB and GildeaOrdoDB.blacklistReply) or ""
+    return (GuildeaOrdoDB and GuildeaOrdoDB.blacklistReply) or ""
 end
 
 function addon:SetBlacklistReply(text)
-    if GildeaOrdoDB then
-        GildeaOrdoDB.blacklistReply = text or ""
+    if GuildeaOrdoDB then
+        GuildeaOrdoDB.blacklistReply = text or ""
     end
 end
 
 function addon:ShareBlacklist()
-    if not GildeaOrdoDB or not GildeaOrdoDB.blacklist or next(GildeaOrdoDB.blacklist) == nil then
-        print("|cFFFFCC00GildeaOrdo|r: Blacklist is empty.")
+    if not GuildeaOrdoDB or not GuildeaOrdoDB.blacklist or next(GuildeaOrdoDB.blacklist) == nil then
+        print("|cFFFFCC00GuildeaOrdo|r: Blacklist is empty.")
         return
     end
 
     local entries = {}
-    for nameLower, note in pairs(GildeaOrdoDB.blacklist) do
+    for nameLower, note in pairs(GuildeaOrdoDB.blacklist) do
         local display = nameLower:sub(1,1):upper() .. nameLower:sub(2)
         local noteStr = note or ""
         if type(noteStr) ~= "string" then noteStr = "" end
@@ -104,26 +104,26 @@ function addon:ShareBlacklist()
     table.sort(entries)
 
     if #entries == 0 then
-        print("|cFFFFCC00GildeaOrdo|r: Blacklist is empty.")
+        print("|cFFFFCC00GuildeaOrdo|r: Blacklist is empty.")
         return
     end
 
-    SendChatMessage("GildeaOrdo Blacklist share:", "OFFICER")
+    SendChatMessage("GuildeaOrdo Blacklist share:", "OFFICER")
 
     local blMessages = {}
-    local current = "GildeaOrdo BL: "
+    local current = "GuildeaOrdo BL: "
     local MAX_MSG_LEN = 220
     for i, entry in ipairs(entries) do
-        local sep = (#current > #("GildeaOrdo BL: ")) and "||" or ""
+        local sep = (#current > #("GuildeaOrdo BL: ")) and "||" or ""
         local addition = sep .. entry
         if #current + #addition > MAX_MSG_LEN then
             table.insert(blMessages, current)
-            current = "GildeaOrdo BL: " .. entry
+            current = "GuildeaOrdo BL: " .. entry
         else
             current = current .. addition
         end
     end
-    if #current > #("GildeaOrdo BL: ") then
+    if #current > #("GuildeaOrdo BL: ") then
         table.insert(blMessages, current)
     end
 
@@ -141,5 +141,5 @@ function addon:ShareBlacklist()
     end
 
     if #blMessages > 0 then sendBurst() end
-    print("|cFFFFCC00GildeaOrdo|r: Shared " .. #entries .. " blacklisted members (with notes) to Officer chat.")
+    print("|cFFFFCC00GuildeaOrdo|r: Shared " .. #entries .. " blacklisted members (with notes) to Officer chat.")
 end

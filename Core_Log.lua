@@ -1,5 +1,5 @@
--- GildeaOrdo Log and Roster Snapshotting
-local addon = GildeaOrdo
+-- GuildeaOrdo Log and Roster Snapshotting
+local addon = GuildeaOrdo
 
 local LOG_MAX = 15000        -- cap log size per guild to prevent unbounded growth
 local SNAPSHOT_DEBOUNCE = 2 -- seconds; coalesce burst GUILD_ROSTER_UPDATE events
@@ -98,9 +98,9 @@ local function diffSnapshots(old, new, guild)
 
                 if CanEditOfficerNote and CanEditOfficerNote() then
                     local currentNote = info.officerNote or ""
-                    local dateTag = (GildeaOrdoDB.bracketLeft or "[") .. todayStr .. (GildeaOrdoDB.bracketRight or "]")
-                    local lMag = addon.escapePattern(GildeaOrdoDB and GildeaOrdoDB.bracketLeft or "[")
-                    local rMag = addon.escapePattern(GildeaOrdoDB and GildeaOrdoDB.bracketRight or "]")
+                    local dateTag = (GuildeaOrdoDB.bracketLeft or "[") .. todayStr .. (GuildeaOrdoDB.bracketRight or "]")
+                    local lMag = addon.escapePattern(GuildeaOrdoDB and GuildeaOrdoDB.bracketLeft or "[")
+                    local rMag = addon.escapePattern(GuildeaOrdoDB and GuildeaOrdoDB.bracketRight or "]")
                     if not string.match(currentNote, lMag .. "%a%a%a %d%d %d%d%d%d" .. rMag) then                        local newNote = currentNote
                         if currentNote == "" then
                             newNote = dateTag
@@ -229,14 +229,14 @@ local function scheduleDiff()
                 guild.members[name] = nil
 
                 -- Auto Ban on Leaving
-                if GildeaOrdoDB and GildeaOrdoDB.autoBanOnLeave then
+                if GuildeaOrdoDB and GuildeaOrdoDB.autoBanOnLeave then
                     local officer = UnitName("player") or "System"
                     local dateStr = date("%b %d %Y")
                     local note = dateStr .. ": Quit Guild"
                     if addon.AddToBlacklist then
                         addon:AddToBlacklist(name, note)
                     end
-                    print("|cFFFFCC00GildeaOrdo|r: Auto-banned |cffffffff" .. tostring(name) .. "|r for leaving the guild.")
+                    print("|cFFFFCC00GuildeaOrdo|r: Auto-banned |cffffffff" .. tostring(name) .. "|r for leaving the guild.")
                 end
             end
         end

@@ -1,5 +1,5 @@
--- GildeaOrdo Roster UI Module
-local addon = GildeaOrdo
+-- GuildeaOrdo Roster UI Module
+local addon = GuildeaOrdo
 local UI    = addon.UI
 
 -- =========================================================
@@ -8,7 +8,7 @@ local UI    = addon.UI
 local contextMenuFrame
 function UI.ShowRosterContextMenu(name)
     if not name or name == "" then return end
-    if not contextMenuFrame then contextMenuFrame = CreateFrame("Frame", "GildeaOrdoRosterContextMenu", UIParent, "UIDropDownMenuTemplate") end
+    if not contextMenuFrame then contextMenuFrame = CreateFrame("Frame", "GuildeaOrdoRosterContextMenu", UIParent, "UIDropDownMenuTemplate") end
     local isSelf = (name == UnitName("player"))
     local canPromote = CanGuildPromote and CanGuildPromote() and not isSelf
     local canDemote  = CanGuildDemote  and CanGuildDemote()  and not isSelf
@@ -25,15 +25,15 @@ function UI.ShowRosterContextMenu(name)
         {
             text = "Promote", notCheckable = true, disabled = not canPromote,
             func = function()
-                StaticPopupDialogs["GildeaOrdo_CONFIRM_PROMOTE"] = { text = "Promote |cffffff00"..name.."|r by one rank?", button1 = "Promote", button2 = "Cancel", OnAccept = function() if GuildPromote then GuildPromote(name) end; if addon.RequestRosterAfterAction then addon:RequestRosterAfterAction() else GuildRoster() end end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }
-                StaticPopup_Show("GildeaOrdo_CONFIRM_PROMOTE")
+                StaticPopupDialogs["GuildeaOrdo_CONFIRM_PROMOTE"] = { text = "Promote |cffffff00"..name.."|r by one rank?", button1 = "Promote", button2 = "Cancel", OnAccept = function() if GuildPromote then GuildPromote(name) end; if addon.RequestRosterAfterAction then addon:RequestRosterAfterAction() else GuildRoster() end end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }
+                StaticPopup_Show("GuildeaOrdo_CONFIRM_PROMOTE")
             end,
         },
         {
             text = "Demote", notCheckable = true, disabled = not canDemote,
             func = function()
-                StaticPopupDialogs["GildeaOrdo_CONFIRM_DEMOTE"] = { text = "Demote |cffffff00"..name.."|r by one rank?", button1 = "Demote", button2 = "Cancel", OnAccept = function() if GuildDemote then GuildDemote(name) end; if addon.RequestRosterAfterAction then addon:RequestRosterAfterAction() else GuildRoster() end end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }
-                StaticPopup_Show("GildeaOrdo_CONFIRM_DEMOTE")
+                StaticPopupDialogs["GuildeaOrdo_CONFIRM_DEMOTE"] = { text = "Demote |cffffff00"..name.."|r by one rank?", button1 = "Demote", button2 = "Cancel", OnAccept = function() if GuildDemote then GuildDemote(name) end; if addon.RequestRosterAfterAction then addon:RequestRosterAfterAction() else GuildRoster() end end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }
+                StaticPopup_Show("GuildeaOrdo_CONFIRM_DEMOTE")
             end,
         },
         { text = "Whisper", notCheckable = true, disabled = isSelf, func = function() if ChatFrame_OpenChat then ChatFrame_OpenChat("/w "..name.." ", DEFAULT_CHAT_FRAME) end end },
@@ -41,8 +41,8 @@ function UI.ShowRosterContextMenu(name)
         {
             text = "Ban Member", notCheckable = true, disabled = isSelf,
             func = function()
-                StaticPopupDialogs["GildeaOrdo_CONFIRM_BAN"] = { text = "Ban |cffffff00" .. name .. "|r ?\nThis will KICK the member and add them to the Blacklist.", button1 = "BAN (Kick + Blacklist)", button2 = "Cancel", OnAccept = function() local officer = UnitName("player") or "Officer"; local dateStr = date("%b %d %Y"); local note = officer .. " " .. dateStr .. ": banned"; if GuildUninvite then GuildUninvite(name) end; if addon.AddToBlacklist then addon:AddToBlacklist(name, note) end; if addon.RequestRosterAfterAction then addon:RequestRosterAfterAction() else GuildRoster() end end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }
-                StaticPopup_Show("GildeaOrdo_CONFIRM_BAN")
+                StaticPopupDialogs["GuildeaOrdo_CONFIRM_BAN"] = { text = "Ban |cffffff00" .. name .. "|r ?\nThis will KICK the member and add them to the Blacklist.", button1 = "BAN (Kick + Blacklist)", button2 = "Cancel", OnAccept = function() local officer = UnitName("player") or "Officer"; local dateStr = date("%b %d %Y"); local note = officer .. " " .. dateStr .. ": banned"; if GuildUninvite then GuildUninvite(name) end; if addon.AddToBlacklist then addon:AddToBlacklist(name, note) end; if addon.RequestRosterAfterAction then addon:RequestRosterAfterAction() else GuildRoster() end end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }
+                StaticPopup_Show("GuildeaOrdo_CONFIRM_BAN")
             end,
         },
         { text = "Cancel", notCheckable = true, func = function() end },
@@ -54,20 +54,20 @@ end
 -- Builders & Row Collection
 -- =========================================================
 function UI.BuildRoster(f)
-    f.rosterShowOfflineCB = CreateFrame("CheckButton", "GildeaOrdoShowOffline", f, "OptionsBaseCheckButtonTemplate")
+    f.rosterShowOfflineCB = CreateFrame("CheckButton", "GuildeaOrdoShowOffline", f, "OptionsBaseCheckButtonTemplate")
     f.rosterShowOfflineCB:SetSize(20, 20); f.rosterShowOfflineCB:SetPoint("TOPLEFT", f.tabLog, "BOTTOMLEFT", 0, -18); f.rosterShowOfflineCB:SetChecked(UI.rosterShowOffline)
     f.rosterShowOfflineCB:SetScript("OnClick", function(self) UI.rosterShowOffline = self:GetChecked() and true or false; UI:Refresh() end)
     f.rosterShowOfflineLabel = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     f.rosterShowOfflineLabel:SetPoint("LEFT", f.rosterShowOfflineCB, "RIGHT", 2, 0); f.rosterShowOfflineLabel:SetText("Show Offline")
 
-    f.rosterPSearch = CreateFrame("EditBox", "GildeaOrdoRosterPSearch", f, "InputBoxTemplate")
+    f.rosterPSearch = CreateFrame("EditBox", "GuildeaOrdoRosterPSearch", f, "InputBoxTemplate")
     f.rosterPSearch:SetSize(120, 20); f.rosterPSearch:SetPoint("LEFT", f.rosterShowOfflineLabel, "RIGHT", 50, 0); f.rosterPSearch:SetAutoFocus(false)
     f.rosterPSearch:SetScript("OnTextChanged", function(self) UI.rosterPlayerSearch = self:GetText() or ""; UI:Refresh() end)
     f.rosterPSearch:SetScript("OnEscapePressed", function(self) self:ClearFocus() end); f.rosterPSearch:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
     f.rosterPSearchLabel = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     f.rosterPSearchLabel:SetPoint("BOTTOMLEFT", f.rosterPSearch, "TOPLEFT", -4, 1); f.rosterPSearchLabel:SetText("Player Search")
 
-    f.rosterRankSearch = CreateFrame("EditBox", "GildeaOrdoRosterRankSearch", f, "InputBoxTemplate")
+    f.rosterRankSearch = CreateFrame("EditBox", "GuildeaOrdoRosterRankSearch", f, "InputBoxTemplate")
     f.rosterRankSearch:SetSize(120, 20)
     f.rosterRankSearch:SetPoint("LEFT", f.rosterPSearch, "RIGHT", 24, 0)
     f.rosterRankSearch:SetAutoFocus(false)
@@ -82,7 +82,7 @@ function UI.BuildRoster(f)
     f.rosterRankSearchLabel:SetPoint("BOTTOMLEFT", f.rosterRankSearch, "TOPLEFT", -4, 1)
     f.rosterRankSearchLabel:SetText("Rank Search")
 
-    f.rosterNSearch = CreateFrame("EditBox", "GildeaOrdoRosterNSearch", f, "InputBoxTemplate")
+    f.rosterNSearch = CreateFrame("EditBox", "GuildeaOrdoRosterNSearch", f, "InputBoxTemplate")
     f.rosterNSearch:SetSize(120, 20)
     f.rosterNSearch:SetPoint("LEFT", f.rosterRankSearch, "RIGHT", 24, 0)
     f.rosterNSearch:SetAutoFocus(false) 
@@ -91,7 +91,7 @@ function UI.BuildRoster(f)
     f.rosterNSearchLabel = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     f.rosterNSearchLabel:SetPoint("BOTTOMLEFT", f.rosterNSearch, "TOPLEFT", -4, 1); f.rosterNSearchLabel:SetText("Note Search")
 
-    f.rosterOffDaysInput = CreateFrame("EditBox", "GildeaOrdoRosterOffDays", f, "InputBoxTemplate")
+    f.rosterOffDaysInput = CreateFrame("EditBox", "GuildeaOrdoRosterOffDays", f, "InputBoxTemplate")
     f.rosterOffDaysInput:SetSize(40, 20); f.rosterOffDaysInput:SetPoint("LEFT", f.rosterNSearch, "RIGHT", 24, 0); f.rosterOffDaysInput:SetAutoFocus(false); f.rosterOffDaysInput:SetNumeric(true)
     f.rosterOffDaysInput:SetScript("OnTextChanged", function(self) UI.rosterOfflineDaysSearch = self:GetText() or ""; UI:Refresh() end)
     f.rosterOffDaysInput:SetScript("OnEscapePressed", function(self) self:ClearFocus() end); f.rosterOffDaysInput:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
@@ -120,9 +120,9 @@ function UI.BuildRoster(f)
         addon:delayCall(0.5, function() addon.isScanningRoster = false end)
         end
 
-        if #list == 0 then print("|cff00ff00GildeaOrdo:|r No members with empty Officer Notes."); return end
-        local dateTag = (GildeaOrdoDB.bracketLeft or "[") .. date("%b %d %Y") .. (GildeaOrdoDB.bracketRight or "]")
-        StaticPopupDialogs["GildeaOrdo_CONFIRM_ONOTE_EMPTY"] = {
+        if #list == 0 then print("|cff00ff00GuildeaOrdo:|r No members with empty Officer Notes."); return end
+        local dateTag = (GuildeaOrdoDB.bracketLeft or "[") .. date("%b %d %Y") .. (GuildeaOrdoDB.bracketRight or "]")
+        StaticPopupDialogs["GuildeaOrdo_CONFIRM_ONOTE_EMPTY"] = {
         text = "Insert today's date " .. dateTag .. " for |cffffff00" .. #list .. "|r members?",
         button1 = "Proceed", button2 = "Cancel",
         OnAccept = function()
@@ -146,19 +146,19 @@ function UI.BuildRoster(f)
         end,
         timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3
         }
-        StaticPopup_Show("GildeaOrdo_CONFIRM_ONOTE_EMPTY")
+        StaticPopup_Show("GuildeaOrdo_CONFIRM_ONOTE_EMPTY")
     end)
 
     f.rosterMassKickBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
     f.rosterMassKickBtn:SetSize(150, 24); f.rosterMassKickBtn:SetPoint("BOTTOMRIGHT", -18, 18); f.rosterMassKickBtn:SetText("Mass Kick List")
     f.rosterMassKickBtn:SetScript("OnClick", function()
         local rows = addon.RosterRowsCache or {}
-        if #rows == 0 or UI.rosterShowOffline == false then if UI.rosterShowOffline == false then print("|cff00ff00GildeaOrdo:|r No Offline Selection on, Action aborted ") end; return end
-        StaticPopupDialogs["GildeaOrdo_CONFIRM_MASS_KICK"] = { text = "WARNING: Kick |cffffff00" .. #rows .. "|r currently filtered members?", button1 = "KICK ALL", button2 = "Cancel", OnAccept = function() StaticPopupDialogs["GildeaOrdo_CONFIRM_MASS_KICK_2"] = { text = "SECOND CONFIRMATION: Are you absolutely sure? This cannot be undone.", button1 = "YES, KICK", button2 = "Cancel", OnAccept = function() UI.ProcessBatch("Mass Kick", rows, function(name) if not addon:IsWhitelisted(name) then if GuildUninvite then GuildUninvite(name) end end end) end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }; StaticPopup_Show("GildeaOrdo_CONFIRM_MASS_KICK_2") end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }
-        StaticPopup_Show("GildeaOrdo_CONFIRM_MASS_KICK")
+        if #rows == 0 or UI.rosterShowOffline == false then if UI.rosterShowOffline == false then print("|cff00ff00GuildeaOrdo:|r No Offline Selection on, Action aborted ") end; return end
+        StaticPopupDialogs["GuildeaOrdo_CONFIRM_MASS_KICK"] = { text = "WARNING: Kick |cffffff00" .. #rows .. "|r currently filtered members?", button1 = "KICK ALL", button2 = "Cancel", OnAccept = function() StaticPopupDialogs["GuildeaOrdo_CONFIRM_MASS_KICK_2"] = { text = "SECOND CONFIRMATION: Are you absolutely sure? This cannot be undone.", button1 = "YES, KICK", button2 = "Cancel", OnAccept = function() UI.ProcessBatch("Mass Kick", rows, function(name) if not addon:IsWhitelisted(name) then if GuildUninvite then GuildUninvite(name) end end end) end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }; StaticPopup_Show("GuildeaOrdo_CONFIRM_MASS_KICK_2") end, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3 }
+        StaticPopup_Show("GuildeaOrdo_CONFIRM_MASS_KICK")
     end)
 
-    f.groupAltsCB = CreateFrame("CheckButton", "GildeaOrdoGroupAltsCB", f, "OptionsBaseCheckButtonTemplate")
+    f.groupAltsCB = CreateFrame("CheckButton", "GuildeaOrdoGroupAltsCB", f, "OptionsBaseCheckButtonTemplate")
     f.groupAltsCB:SetSize(20, 20); f.groupAltsCB:SetPoint("BOTTOMLEFT", 24, 22); f.groupAltsCB:SetChecked(UI.groupAltsWithMain)
     f.groupAltsCB:SetScript("OnClick", function(self) UI.groupAltsWithMain = self:GetChecked() and true or false; UI:Refresh() end)
     f.groupAltsLabel = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
@@ -175,8 +175,8 @@ if not guild then return rows, 0, 0 end
     local rankNeedle  = UI.lowerSafe(UI.rosterRankSearch)
     local noteNeedle  = UI.lowerSafe(UI.rosterNoteSearch)
 
-    local lMag = addon.escapePattern(GildeaOrdoDB and GildeaOrdoDB.bracketLeft or "[")
-    local rMag = addon.escapePattern(GildeaOrdoDB and GildeaOrdoDB.bracketRight or "]")
+    local lMag = addon.escapePattern(GuildeaOrdoDB and GuildeaOrdoDB.bracketLeft or "[")
+    local rMag = addon.escapePattern(GuildeaOrdoDB and GuildeaOrdoDB.bracketRight or "]")
 
     local oldShowOffline = GetGuildRosterShowOffline()
     if not oldShowOffline then
