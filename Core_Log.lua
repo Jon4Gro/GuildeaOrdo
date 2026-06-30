@@ -107,9 +107,24 @@ local function diffSnapshots(old, new, guild)
                         elseif string.len(currentNote) + string.len(dateTag) + 1 <= 30 then
                             newNote = currentNote .. " " .. dateTag
                         end
-                        if newNote ~= currentNote and info.index then
-                            GuildRosterSetOfficerNote(info.index, newNote)
-                        end
+                        if newNote ~= currentNote then
+                            -- SAFE FIX: Dynamically find the player by name to avoid index-shifting cross-talk.
+                            local oldShow = GetGuildRosterShowOffline()
+                            if not oldShow then
+                                SetGuildRosterShowOffline(true)
+                                end
+
+                                for i = 1, GetNumGuildMembers() do
+                                if GetGuildRosterInfo(i) == name then
+                                    GuildRosterSetOfficerNote(i, newNote)
+                                    break
+                                    end
+                                    end
+
+                                        if not oldShow then
+                                            SetGuildRosterShowOffline(false)
+                                        end
+                            end
                     end
                 end
             end
